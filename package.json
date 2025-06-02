@@ -1,14 +1,19 @@
 {
-  "name": "",
+  "name": "astro-isr",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro build && wrangler pages dev ./dist",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.8.1"
+    "astro": "^5.8.1",
+    "@astrojs/cloudflare": "^12.5.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250601.0"
   }
 }

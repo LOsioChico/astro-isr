@@ -1,16 +1,94 @@
 ---
+// Enable ISR for this page
+Astro.response.headers.set("x-isr", "true");
+Astro.response.headers.set("cache-control", "max-age=60");
 
+const currentTime = new Date().toLocaleString();
+const randomValue = Math.random();
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro ISR Demo</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1rem 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      h1 {
+        margin-top: 0;
+        color: #fff;
+      }
+      .info {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+      .refresh-btn {
+        background: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>🚀 Astro ISR Demo</h1>
+      <p>
+        This page demonstrates Incremental Static Regeneration (ISR) with
+        Cloudflare Cache API.
+      </p>
+
+      <div class="info">
+        <h3>📅 Generated at:</h3>
+        <p><strong>{currentTime}</strong></p>
+      </div>
+
+      <div class="info">
+        <h3>🎲 Random value:</h3>
+        <p><strong>{randomValue}</strong></p>
+      </div>
+
+      <div class="info">
+        <h3>⚡ How it works:</h3>
+        <ul>
+          <li>First visit: Page is generated server-side and cached</li>
+          <li>Subsequent visits: Served from Cloudflare's edge cache</li>
+          <li>Cache TTL: 60 seconds (set via cache-control header)</li>
+          <li>After TTL expires: Page regenerates on next visit</li>
+        </ul>
+      </div>
+
+      <button class="refresh-btn" onclick="window.location.reload()">
+        🔄 Refresh Page
+      </button>
+
+      <p>
+        <small>Check your browser's Network tab to see cache status!</small>
+      </p>
+    </div>
+  </body>
 </html>
