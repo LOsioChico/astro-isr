@@ -1,0 +1,197 @@
+---
+// Enable ISR for this dynamic page
+Astro.response.headers.set("x-isr", "true");
+Astro.response.headers.set("cache-control", "max-age=30");
+
+const { slug } = Astro.params;
+const currentTime = new Date().toLocaleString();
+const randomValue = Math.random();
+
+// Simulate some dynamic content based on slug
+const getContentForSlug = (slug: string) => {
+  const contents = {
+    products: {
+      title: "🛍️ Products Page",
+      description: "Dynamic product catalog with ISR caching",
+      color: "#e74c3c",
+    },
+    blog: {
+      title: "📝 Blog Page",
+      description: "Latest blog posts with edge caching",
+      color: "#3498db",
+    },
+    about: {
+      title: "👋 About Page",
+      description: "Company information with ISR",
+      color: "#2ecc71",
+    },
+  };
+
+  return (
+    contents[slug as keyof typeof contents] || {
+      title: `📄 ${slug?.toUpperCase()} Page`,
+      description: `Dynamic content for "${slug}" with ISR caching`,
+      color: "#9b59b6",
+    }
+  );
+};
+
+const content = getContentForSlug(slug || "default");
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{content.title} - Astro ISR</title>
+    <style define:vars={{ themeColor: content.color }}>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--themeColor) 0%, #2c3e50 100%);
+        color: white;
+        min-height: 100vh;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1rem 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      h1 {
+        margin-top: 0;
+        color: #fff;
+      }
+      .info {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+      .nav {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+      .nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        display: inline-block;
+        margin-bottom: 5px;
+      }
+      .nav a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .refresh-btn {
+        background: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px 5px 10px 0;
+      }
+      .revalidate-btn {
+        background: #ff6b6b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px 5px 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav">
+      <strong>🧭 Navigation:</strong>
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+      <a href="/custom-page">Custom</a>
+    </div>
+
+    <div class="card">
+      <h1>{content.title}</h1>
+      <p>{content.description}</p>
+
+      <div class="info">
+        <h3>📍 Current Route:</h3>
+        <p><strong>/{slug}</strong></p>
+      </div>
+
+      <div class="info">
+        <h3>📅 Generated at:</h3>
+        <p><strong>{currentTime}</strong></p>
+      </div>
+
+      <div class="info">
+        <h3>🎲 Random value:</h3>
+        <p><strong>{randomValue}</strong></p>
+      </div>
+
+      <div class="info">
+        <h3>⚡ ISR Details:</h3>
+        <ul>
+          <li><strong>Cache TTL:</strong> 30 seconds (faster than homepage)</li>
+          <li><strong>Dynamic content:</strong> Based on URL slug parameter</li>
+          <li><strong>Edge cached:</strong> Each route cached independently</li>
+          <li>
+            <strong>Auto-regeneration:</strong> After 30 seconds on next visit
+          </li>
+        </ul>
+      </div>
+
+      <button class="refresh-btn" onclick="window.location.reload()">
+        🔄 Refresh Page
+      </button>
+
+      <button class="revalidate-btn" onclick="revalidateCache()">
+        🗑️ Clear Cache
+      </button>
+
+      <p>
+        <small
+          >💡 Try different routes and watch how each one caches independently!</small
+        >
+      </p>
+    </div>
+
+    <script>
+      async function revalidateCache() {
+        try {
+          const currentUrl = window.location.href;
+          const response = await fetch(
+            `/api/revalidate?url=${encodeURIComponent(currentUrl)}`
+          );
+          const data = await response.json();
+
+          if (data.success) {
+            alert("✅ Cache cleared! Refresh to see fresh content.");
+          } else {
+            alert("❌ Failed to clear cache: " + data.error);
+          }
+        } catch (error) {
+          alert(
+            "❌ Error: " +
+              (error instanceof Error ? error.message : String(error))
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

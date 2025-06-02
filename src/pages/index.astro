@@ -52,9 +52,36 @@ const randomValue = Math.random();
         font-size: 16px;
         margin: 10px 0;
       }
+      .nav {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+      .nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        display: inline-block;
+        margin-bottom: 5px;
+      }
+      .nav a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
     </style>
   </head>
   <body>
+    <div class="nav">
+      <strong>🧭 Try Dynamic Routes:</strong>
+      <a href="/products">Products</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+      <a href="/custom-page">Custom</a>
+    </div>
+
     <div class="card">
       <h1>🚀 Astro ISR Demo</h1>
       <p>
