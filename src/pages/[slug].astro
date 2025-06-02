@@ -11,27 +11,27 @@ const randomValue = Math.random();
 const getContentForSlug = (slug: string) => {
   const contents = {
     products: {
-      title: "🛍️ Products Page",
+      title: "🛍️ Products",
       description: "Dynamic product catalog with ISR caching",
-      color: "#e74c3c",
+      accent: "#3b82f6",
     },
     blog: {
-      title: "📝 Blog Page",
+      title: "📝 Blog",
       description: "Latest blog posts with edge caching",
-      color: "#3498db",
+      accent: "#10b981",
     },
     about: {
-      title: "👋 About Page",
+      title: "👋 About",
       description: "Company information with ISR",
-      color: "#2ecc71",
+      accent: "#8b5cf6",
     },
   };
 
   return (
     contents[slug as keyof typeof contents] || {
-      title: `📄 ${slug?.toUpperCase()} Page`,
+      title: `📄 ${slug?.charAt(0).toUpperCase()}${slug?.slice(1)}`,
       description: `Dynamic content for "${slug}" with ISR caching`,
-      color: "#9b59b6",
+      accent: "#f59e0b",
     }
   );
 };
@@ -46,129 +46,296 @@ const content = getContentForSlug(slug || "default");
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{content.title} - Astro ISR</title>
-    <style define:vars={{ themeColor: content.color }}>
+    <style define:vars={{ accentColor: content.accent }}>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: system-ui, sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-        background: linear-gradient(135deg, var(--themeColor) 0%, #2c3e50 100%);
-        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #1a1a1a;
+        background: #f8fafc;
         min-height: 100vh;
       }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--accentColor);
+        margin-bottom: 0.5rem;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        color: #64748b;
+      }
+
+      .nav {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        border: 1px solid #e2e8f0;
+      }
+
+      .nav-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #374151;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .nav a {
+        color: #475569;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background: #f1f5f9;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover {
+        background: #e2e8f0;
+        color: #334155;
+      }
+
       .card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        background: white;
         border-radius: 12px;
         padding: 2rem;
-        margin: 1rem 0;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        border: 1px solid #e2e8f0;
       }
-      h1 {
-        margin-top: 0;
-        color: #fff;
-      }
-      .info {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 1rem;
+
+      .route-info {
+        background: linear-gradient(
+          135deg,
+          var(--accentColor),
+          rgba(59, 130, 246, 0.8)
+        );
+        color: white;
+        padding: 1.5rem;
         border-radius: 8px;
-        margin: 1rem 0;
+        margin-bottom: 2rem;
+        text-align: center;
       }
-      .nav {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 1rem;
+
+      .route-info h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .info-grid {
+        display: grid;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .info-item {
+        background: #f8fafc;
+        padding: 1.25rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--accentColor);
+      }
+
+      .info-item h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+      }
+
+      .info-item p {
+        color: #6b7280;
+        font-size: 0.95rem;
+      }
+
+      .info-item strong {
+        color: #1f2937;
+        font-weight: 600;
+      }
+
+      .features {
+        background: #f8fafc;
+        padding: 1.25rem;
         border-radius: 8px;
         margin-bottom: 2rem;
       }
-      .nav a {
-        color: white;
+
+      .features h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 1rem;
+      }
+
+      .features ul {
+        list-style: none;
+      }
+
+      .features li {
+        color: #6b7280;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+
+      .features li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--accentColor);
+        font-weight: bold;
+      }
+
+      .actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
         text-decoration: none;
-        margin: 0 10px;
-        padding: 5px 10px;
-        border-radius: 4px;
-        background: rgba(255, 255, 255, 0.1);
-        display: inline-block;
-        margin-bottom: 5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
       }
-      .nav a:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-      .refresh-btn {
-        background: #4caf50;
+
+      .btn-primary {
+        background: var(--accentColor);
         color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        margin: 10px 5px 10px 0;
       }
-      .revalidate-btn {
-        background: #ff6b6b;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        margin: 10px 5px 10px 0;
+
+      .btn-primary:hover {
+        opacity: 0.9;
+      }
+
+      .btn-secondary {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+      }
+
+      .btn-secondary:hover {
+        background: #e2e8f0;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 2rem;
+        color: #94a3b8;
+        font-size: 0.875rem;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .nav-links {
+          flex-direction: column;
+        }
+
+        .actions {
+          flex-direction: column;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="nav">
-      <strong>🧭 Navigation:</strong>
-      <a href="/">Home</a>
-      <a href="/products">Products</a>
-      <a href="/blog">Blog</a>
-      <a href="/about">About</a>
-      <a href="/custom-page">Custom</a>
-    </div>
-
-    <div class="card">
-      <h1>{content.title}</h1>
-      <p>{content.description}</p>
-
-      <div class="info">
-        <h3>📍 Current Route:</h3>
-        <p><strong>/{slug}</strong></p>
+    <div class="container">
+      <div class="header">
+        <h1>{content.title}</h1>
+        <p>{content.description}</p>
       </div>
 
-      <div class="info">
-        <h3>📅 Generated at:</h3>
-        <p><strong>{currentTime}</strong></p>
+      <div class="nav">
+        <div class="nav-title">Navigation</div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/products">Products</a>
+          <a href="/blog">Blog</a>
+          <a href="/about">About</a>
+          <a href="/custom-page">Custom</a>
+        </div>
       </div>
 
-      <div class="info">
-        <h3>🎲 Random value:</h3>
-        <p><strong>{randomValue}</strong></p>
+      <div class="card">
+        <div class="route-info">
+          <h2>Current Route: /{slug}</h2>
+          <p>Cached independently with 30s TTL</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <h3>📅 Generated at</h3>
+            <p><strong>{currentTime}</strong></p>
+          </div>
+
+          <div class="info-item">
+            <h3>🎲 Random value</h3>
+            <p><strong>{randomValue}</strong></p>
+          </div>
+        </div>
+
+        <div class="features">
+          <h3>⚡ Dynamic Route ISR</h3>
+          <ul>
+            <li>Cache TTL: 30 seconds (faster than homepage)</li>
+            <li>Dynamic content: Based on URL slug parameter</li>
+            <li>Independent caching: Each route cached separately</li>
+            <li>Auto-regeneration: Fresh content after 30s</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="window.location.reload()">
+            🔄 Refresh Page
+          </button>
+          <button class="btn btn-secondary" onclick="revalidateCache()">
+            🗑️ Clear Cache
+          </button>
+        </div>
+
+        <div class="footer">
+          💡 Try different routes to see independent caching
+        </div>
       </div>
-
-      <div class="info">
-        <h3>⚡ ISR Details:</h3>
-        <ul>
-          <li><strong>Cache TTL:</strong> 30 seconds (faster than homepage)</li>
-          <li><strong>Dynamic content:</strong> Based on URL slug parameter</li>
-          <li><strong>Edge cached:</strong> Each route cached independently</li>
-          <li>
-            <strong>Auto-regeneration:</strong> After 30 seconds on next visit
-          </li>
-        </ul>
-      </div>
-
-      <button class="refresh-btn" onclick="window.location.reload()">
-        🔄 Refresh Page
-      </button>
-
-      <button class="revalidate-btn" onclick="revalidateCache()">
-        🗑️ Clear Cache
-      </button>
-
-      <p>
-        <small
-          >💡 Try different routes and watch how each one caches independently!</small
-        >
-      </p>
     </div>
 
     <script>
