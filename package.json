@@ -3,10 +3,12 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "start": "astro build && wrangler pages dev ./dist",
+    "pages:dev": "astro build && wrangler pages dev ./dist --port 4321",
+    "pages:deploy": "astro build && wrangler pages deploy ./dist",
+    "worker:dev": "astro build && wrangler dev --port 4321",
+    "worker:deploy": "astro build && wrangler deploy",
     "build": "astro build",
-    "preview": "astro preview",
-    "deploy": "astro build && wrangler pages deploy ./dist"
+    "preview": "astro preview"
   },
   "dependencies": {
     "astro": "^5.8.1",

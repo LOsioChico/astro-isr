@@ -1,10 +1,10 @@
 # Astro ISR - Simple Implementation
 
-A simplified proof of concept for **Incremental Static Regeneration (ISR)** with Astro and Cloudflare Pages, featuring **dynamic routes** and **independent caching**.
+A simplified proof of concept for **Incremental Static Regeneration (ISR)** with Astro and Cloudflare Pages/Workers, featuring **dynamic routes** and **independent caching**.
 
 ## 🚀 Features
 
-- **Server-side rendering** with Cloudflare Pages
+- **Server-side rendering** with Cloudflare Pages or Workers
 - **Edge caching** using Cloudflare's Cache API
 - **Dynamic routes** with parameterized URLs (`/products`, `/blog`, `/about`, etc.)
 - **Independent cache management** - each route cached separately
@@ -29,16 +29,45 @@ A simplified proof of concept for **Incremental Static Regeneration (ISR)** with
    yarn install
    ```
 
-2. **Development** (local preview):
+2. **Development** (choose one):
+
+   **Option A: Cloudflare Pages (Recommended)**
 
    ```bash
-   yarn start
+   yarn pages:dev
+   ```
+
+   **Option B: Cloudflare Workers**
+
+   ```bash
+   yarn worker:dev
    ```
 
 3. **Build for production**:
    ```bash
    yarn build
    ```
+
+## 🚀 Deployment
+
+**Option A: Deploy to Cloudflare Pages**
+
+```bash
+yarn pages:deploy
+```
+
+**Option B: Deploy to Cloudflare Workers**
+
+```bash
+yarn worker:deploy
+```
+
+### **Cloudflare Pages vs Workers**
+
+- **Pages**: Static site hosting with serverless functions (recommended for most use cases)
+- **Workers**: Full serverless compute platform (more control, different pricing)
+
+Both support the same ISR functionality and Cache API.
 
 ## 🎯 ISR Configuration
 
@@ -181,14 +210,17 @@ Cache HIT for: /products
 
 ## ⚡ Development vs Production
 
-### **Development Mode** (`yarn dev`)
+### **Development Mode**
 
-- Cache operations logged but may not persist between requests
-- ISR middleware runs but uses in-memory cache simulation
-- Full functionality available in production deployment
+- **Pages**: `yarn pages:dev` - Full Cloudflare Pages simulation
+- **Workers**: `yarn worker:dev` - Cloudflare Workers environment
+- Cache operations logged and functional
+- True edge caching behavior in local development
 
-### **Production Mode** (Cloudflare Pages)
+### **Production Mode**
 
+- **Pages**: `yarn pages:deploy` - Deploy to Cloudflare Pages
+- **Workers**: `yarn worker:deploy` - Deploy to Cloudflare Workers
 - Full Cloudflare Cache API functionality
 - Persistent cache across requests and regions
 - True edge caching with global distribution
@@ -198,16 +230,7 @@ Cache HIT for: /products
 - **Regional cache**: Invalidation only affects current Cloudflare region
 - **512 MB limit**: Maximum cached object size
 - **Free tier limits**: 50 cache operations per request
-- **No dev server support**: Requires Cloudflare Workers environment
-
-## 🚀 Deployment
-
-Deploy to Cloudflare Pages:
-
-1. Connect your repository to Cloudflare Pages
-2. Set build command: `npm run build`
-3. Set output directory: `dist`
-4. Deploy and test ISR functionality with real edge caching
+- **Platform differences**: Pages vs Workers have different feature sets
 
 ## 📈 Advanced Testing
 
@@ -227,6 +250,8 @@ Deploy to Cloudflare Pages:
 
 - [Cloudflare Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/)
 - [Astro Cloudflare Adapter](https://docs.astro.build/en/guides/integrations-guide/cloudflare/)
+- [Cloudflare Pages](https://developers.cloudflare.com/pages/)
+- [Cloudflare Workers](https://developers.cloudflare.com/workers/)
 - [Workers Limits](https://developers.cloudflare.com/workers/platform/limits/)
 - [Astro Dynamic Routes](https://docs.astro.build/en/core-concepts/routing/#dynamic-routes)
 
@@ -234,10 +259,12 @@ Deploy to Cloudflare Pages:
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `yarn install`         | Installs dependencies                            |
-| `yarn build`           | Build your production site to `./dist/`          |
-| `yarn preview`         | Preview your build locally, before deploying     |
-| `yarn astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `yarn astro -- --help` | Get help using the Astro CLI                     |
+| Command              | Action                                           |
+| :------------------- | :----------------------------------------------- |
+| `yarn install`       | Installs dependencies                            |
+| `yarn pages:dev`     | Start development server with Cloudflare Pages   |
+| `yarn pages:deploy`  | Deploy to Cloudflare Pages                       |
+| `yarn worker:dev`    | Start development server with Cloudflare Workers |
+| `yarn worker:deploy` | Deploy to Cloudflare Workers                     |
+| `yarn build`         | Build your production site to `./dist/`          |
+| `yarn preview`       | Preview your build locally, before deploying     |
